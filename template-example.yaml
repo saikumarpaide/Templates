@@ -1,17 +1,68 @@
-apiVersion: backstage.io/v1alpha1
-kind: Component
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
 metadata:
-  name: example-service
-  description: An example service deployed using Backstage
+  name: example-service-template
+  title: Example Service Deployment
+  description: A Backstage template for deploying a new service
   tags:
-    - backend
-    - nodejs
+    - backstage
+    - deployment
+    - service
+
 spec:
-  type: service
-  lifecycle: production
   owner: team-example
-  system: example-system
-  dependsOn:
-    - resource:example-db
-  providesApis:
-    - example-api
+  type: service
+
+  parameters:
+    - title: Service Details
+      required:
+        - serviceName
+        - owner
+        - system
+      properties:
+        serviceName:
+          type: string
+          title: Service Name
+          description: Enter the name of the service to be deployed
+        owner:
+          type: string
+          title: Owner
+          description: Enter the team owning this service
+        system:
+          type: string
+          title: System Name
+          description: Enter the system this service belongs to
+
+  steps:
+    - id: create-repo
+      name: Create Repository
+      action: github:repo:create
+      input:
+        repoUrl: backstage/${{ parameters.serviceName }}
+        repoVisibility: public
+        description: Repository for ${{ parameters.serviceName }}
+
+    - id: publish
+      name: Publish to Backstage
+      action: backstage:register
+      input:
+        entity:
+          apiVersion: backstage.io/v1alpha1
+          kind: Component
+          metadata:
+            name: ${{ parameters.serviceName }}
+            description: A new service created using Backstage
+            tags:
+              - service
+          spec:
+            type: service
+            lifecycle: production
+            owner: ${{ parameters.owner }}
+            system: ${{ parameters.system }}
+
+  output:
+    links:
+      - title: View in Backstage
+        url: https://backstage.example.com/catalog/default/component/${{ parameters.serviceName }}
+      - title: GitHub Repository
+        url: https://github.com/backstage/${{ parameters.serviceName }}
