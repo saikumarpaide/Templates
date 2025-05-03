@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: example-service
+  description: An example service deployed using Backstage
+  tags:
+    - backend
+    - nodejs
+spec:
+  type: service
+  lifecycle: production
+  owner: team-example
+  system: example-system
+  dependsOn:
+    - resource:example-db
+  providesApis:
+    - example-api
