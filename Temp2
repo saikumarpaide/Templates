@@ -1,0 +1,12 @@
+//saikumarpaide
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: test-template
+  title: Test Template
+  description: This is a test template
+  tags:
+    - invalid-tag  # <-- intentionally invalid to trigger validation
+spec:
+  owner: user:saikumarpaide  # <-- GitHub username for email lookup
+  type: service
