@@ -10,7 +10,7 @@ metadata:
     - service
 
 spec:
-  owner: team-example
+  owner: saikumarpaide
   type: service
 
   parameters:
