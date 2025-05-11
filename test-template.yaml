@@ -1,0 +1,24 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: test-template
+  title: Test Template for Validation
+  description: A simple template to test validation and notifications
+spec:
+  owner: user:saikumarpaide
+  type: service
+  parameters:
+    - title: Test Parameter
+      required:
+        - name
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Name of the test entity
+  steps:
+    - id: log-message
+      name: Log a message
+      action: debug:log
+      input:
+        message: "Test template executed for ${parameters.name}"
