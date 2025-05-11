@@ -1,89 +1,31 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: create-react-app-template
-  title: Create React App Template
-  description: Create a new CRA website project
-  tags:
-    - react
-    - cra
+  name: test-backstage-template
+  title: Test Backstage Template
+  description: A template inspired by the Backstage repo for testing validation
 spec:
-  owner: saikumarpaide
-  type: website
+  owner: user:saikumarpaide
+  type: library
   parameters:
-    - title: Provide some simple information
+    - title: Component Details
       required:
-        - component_id
-        - owner
+        - name
       properties:
-        component_id:
-          title: Name
+        name:
+          title: Component Name
           type: string
-          description: Unique name of the component
-          ui:field: EntityNamePicker
-        description:
-          title: Description
-          type: string
-          description: Help others understand what this website is for.
-        owner:
-          title: Owner
-          type: string
-          description: Owner of the component
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - Group
-    - title: Choose a location
-      required:
-        - repoUrl
+          description: Name of the component to create
+    - title: Repository Details
       properties:
-        repoUrl:
-          title: Repository Location
+        repoSlug:
+          title: GitHub Repository Slug
           type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            requestUserCredentials:
-              secretsKey: USER_OAUTH_TOKEN
-              additionalScopes:
-                github:
-                  - workflow
-            allowedHosts:
-              - github.com
+          description: GitHub repository slug (e.g., owner/repo)
+          default: backstage/test-repo
   steps:
-    - id: template
-      name: Fetch Skeleton + Template
-      action: fetch:template
+    - id: log-message
+      name: Log a message
+      action: debug:log
       input:
-        url: ./skeleton
-        copyWithoutRender:
-          - .github/workflows/*
-        values:
-          component_id: ${{ parameters.component_id }}
-          description: ${{ parameters.description }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          owner: ${{ parameters.owner }}
-
-    - id: publish
-      name: Publish
-      action: publish:github
-      input:
-        allowedHosts:
-          - github.com
-        description: This is ${{ parameters.component_id }}
-        repoUrl: ${{ parameters.repoUrl }}
-        token: ${{ secrets.USER_OAUTH_TOKEN }}
-
-    - id: register
-      name: Register
-      action: catalog:register
-      input:
-        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-        catalogInfoPath: "/catalog-info.yaml"
-
-  output:
-    links:
-      - title: Repository
-        url: ${{ steps.publish.output.remoteUrl }}
-      - title: Open in catalog
-        icon: catalog
-        entityRef: ${{ steps.register.output.entityRef }}
+        message: "Created component ${parameters.name} for repo ${parameters.repoSlug}"
