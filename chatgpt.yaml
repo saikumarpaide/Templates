@@ -1,0 +1,14 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: test-template-invalid
+  title: Missing Metadata Template
+  description:
+  tags:
+    - invalid-tag   
+  annotations:
+    
+    backstage.io/readme-path: docs/NOT_EXISTING.md
+spec:
+  type: service
+  owner: user:saikumarpaide  # ✅ Use your GitHub username here
