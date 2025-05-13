@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Template
+metadata:
+  name: example-template
+  title: Example Template
+  description: A simple template.
+spec:
+  owner: backstage-admin
+  type: service
+  steps:
+    - id: example-step
+      name: Setup
+      action: fetch:template
+      input:
+        repoUrl: https://github.com/org/repo
